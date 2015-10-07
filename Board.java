@@ -5,36 +5,43 @@ import java.util.ArrayList;
 //
 
 public class Board {
-
-	ArrayList<Fence> perimeterFences = new ArrayList<Fence>();//Creates an empty arrayList of Perimeter Fences
+	
+	//Lists that store all of the objects on the board
+	ArrayList<Fence> perimeterFences = new ArrayList<Fence>();
 	ArrayList<Fence> interiorFences = new ArrayList<Fence>();
 	ArrayList<Mho> mhos = new ArrayList<Mho>();
 	Player p = new Player();
 
+	//Stores the positions of all the empty spaces
 	ArrayList<Integer> openSpaces = new ArrayList<Integer>();
 
+	//how far each entity moves
 	final int STEP = 30;
-	final int OFFSET = 70;
+	
+	final int OFFSET = 100;
 
+	//Constructs a new Board with all of the fences, mhos, and player. Also initializes the openSpaces method.
 	public Board(){
 		makePerimeter();
 
-
 		makeOpenSpaces();
-		//System.out.println(openSpaces.size());
+
 
 		makeRandomFences();
-		for (int i=0;i<20;i++){
-			//System.out.print(interiorFences.get(i).getX());
-			//System.out.println(" " + interiorFences.get(i).getY());
-		}
+
 		makeMhos();
 		makePlayer();
 
 	}
 
+	/**
+	 * generates a random number between a minimum and maximum value
+	 * @param min is the lowest possible value
+	 * @param max is the highest possible
+	 * @return returns the random integer
+	 */
 	public int randInt(int min, int max){
-		int range = max-min + 1;
+		int range = (max-min) + 1;
 		return (int) (Math.random() * range) + min;
 	}
 
@@ -42,34 +49,58 @@ public class Board {
 		return (coord*STEP)+OFFSET;
 	}
 
-	//Converts a space number(0-100), into an x grid Coordinate (0-12)
+	/**
+	 * Converts a space number(0-99) to a x grid coordinate(1-12)
+	 * main purpose is to serve as an intermediate method for spaceToXCoord
+	 * @param a is the space number
+	 * @return returns the corresponding x grid coordinate
+	 */
 	public int spaceToXGrid(int a){
 
 		return a%10 +1;
 
 	}
-
+	/**
+	 * Converts a space number(0-99) to a x coordinate
+	 * @param a is the space number
+	 * @return returns the x coordinate
+	 */
 	public int spaceToXCoord(int a){
 		return gridToCoords(spaceToXGrid(a));
 	}
-	//Converts a space number(0-100), into a y grid Coordinate (0-12)
+
+	/**
+	 * Converts a space number(0-99) to a y grid coordinate(1-12)
+	 * main purpose is to serve as an intermediate method for spaceToYCoord
+	 * @param a is the space number
+	 * @return returns the corresponding y grid coordinate
+	 */
 	public int spaceToYGrid(int a){
 
 		return a/10 +1;
 
 	}
-
+	/**
+	 * Converts a space number(0-99) to a y coordinate
+	 * @param a is the space number
+	 * @return returns the y coordinate
+	 */
 	public int spaceToYCoord(int a){
 		return gridToCoords(spaceToYGrid(a));
 	}
-	//initializes the openSpaces array to have 100 spaces
+	/**
+	 * Initializes the openSpaces array to have 100 spaces
+	 * these 100 spaces are the 100 that are on the interior of the perimeter
+	 */
 	public void makeOpenSpaces(){
 
 		for (int i=0;i<100;i++){
 			openSpaces.add(i);
 		}
 	}
-
+	/**
+	 * makes the fences that are on the perimeter
+	 */
 	public void makePerimeter(){
 
 		for(int i=0;i<12;i++){
@@ -86,7 +117,10 @@ public class Board {
 			}
 		}
 	}
-
+	
+	/**
+	 * makes the randomly generated fences
+	 */
 	public void makeRandomFences(){
 
 		for (int i=0;i<20;i++){
@@ -98,6 +132,9 @@ public class Board {
 
 	}
 
+	/**
+	 * makes the randomly generated mhos
+	 */
 	public void makeMhos(){
 
 		for (int i=0;i<12;i++){
@@ -109,14 +146,21 @@ public class Board {
 		}
 	}
 
+	/**
+	 * makes the player
+	 */
 	public void makePlayer(){
 		int space = findOpenSpace();
 		p.setX(spaceToXCoord(space));
 		p.setY(spaceToXCoord(space));
 
 	}
-	
+
 	//encapsulate?
+	/**
+	 * finds a random open space on the board, and makes it an occupied space
+	 * @return returns the random space on the board
+	 */
 	public int findOpenSpace(){
 		//Picks a random non-occupied square
 		int index = randInt(0,openSpaces.size()-1);
