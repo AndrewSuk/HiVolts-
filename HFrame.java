@@ -14,12 +14,17 @@ public class HFrame extends JFrame implements KeyListener{
 	}
 
 	Board b = new Board();
+	boolean gameStarted = false;
 
 	public void paint(Graphics g){
+		if (!gameStarted){
+			drawFences(g);
+			gameStarted = true;
+		}
 
-		drawFences(g);
 		drawMhos(g);
 		drawPlayer(g);
+		g.clearRect(b.p.getxOld(),b.p.getyOld(),b.p.SIZE,b.p.SIZE);
 
 	}
 
@@ -61,23 +66,44 @@ public class HFrame extends JFrame implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-/*
-		switch (e.getKeyCode()){
+		
+		//Converts e.getKeyChar() to a string
+		String keyPressed =  e.getKeyChar() + "";
+		
+		//only works if the player can move
+		if (b.p.canMove(b.interiorFences, b.mhos) == true){
+			
+			switch (keyPressed){
+			
+			case "w": 
+				b.p.move(0, -b.STEP);
+				repaint();
+				break;
 
-		case KeyEvent.VK_W: b.p.move(0, -b.STEP);
-			repaint();
-		case KeyEvent.VK_A: b.p.move(-b.STEP, 0);
-			repaint();
-		case KeyEvent.VK_X: b.p.move(0,b.STEP);
-			repaint();
-		case KeyEvent.VK_D: b.p.move(b.STEP,0);
-			repaint();
+			case "a": 
+				b.p.move(-b.STEP, 0);
+				repaint();
+				break;
+			case "x": 
+				System.out.println("x");
+				b.p.move(0,b.STEP);
+				repaint();
+				break;
 
-
-		System.out.println(b.p.getX());
-		System.out.println(b.p.getY());
-		repaint();
-		}*/
+			case "d": 
+				System.out.println("d");
+				b.p.move(b.STEP, 0);
+				repaint();
+				break;
+			}
+			if (keyPressed != "j"){
+				for (Mho mho:b.mhos){
+					mho.Ai(b.p);
+					g.clearRect(mho.getxOld(),mho.getyOld(),mho.SIZE,mho.SIZE);
+				}
+			}
+			//call repaint only a the end, call a method called update mhos first
+		}
 
 	}
 

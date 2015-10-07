@@ -1,4 +1,5 @@
 //
+import java.util.ArrayList;
 public class Player {
 	
 	int x,y, xOld, yOld;
@@ -18,6 +19,18 @@ public class Player {
 		yOld=y;
 		x+=distanceX;
 		y+=distanceY;
+	}
+	public boolean canMove(ArrayList<Fence> fences, ArrayList<Mho> mhos){
+		for(int i=0;i<20;i++){
+			if (fences.get(i).getX() == this.x && fences.get(i).getY() == this.y){
+				return false;
+			}
+			if (i<12 && mhos.get(i).getX() == this.x && mhos.get(i).getY() == this.y){
+				return false;
+			}
+		}
+		return true;
+		
 	}
 	public int getX() {
 		return x;
