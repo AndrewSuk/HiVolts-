@@ -4,10 +4,8 @@ import java.util.ArrayList;
 //
 
 public class Board {
-	final static int numMhos = 2;
+	final static int numMhos = 12;
 	final static int numInteriorFences = 20;
-	//how far each entity moves
-	//final static int STEP = (int)((int) Player.SIZE * 1.5);
 
 	final static int OFFSET = 100;
 
@@ -16,6 +14,7 @@ public class Board {
 	ArrayList<Fence> interiorFences = new ArrayList<Fence>();
 	ArrayList<Mho> mhos = new ArrayList<Mho>();
 	
+	//Creates
 	Player p = new Player();
 
 	//Stores the positions of all the empty spaces
