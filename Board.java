@@ -193,6 +193,9 @@ public class Board {
 	}
 	public void jump(Player p){
 		int space = findOpenSpace();
+		p.setxOld(p.x);
+		p.setyOld(p.y);
+		
 		p.setX(spaceToXCoord(space));
 		p.setY(spaceToYCoord(space));
 	}

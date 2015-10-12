@@ -124,18 +124,14 @@ public class HFrame extends JFrame implements KeyListener{
 			}
 			if (keyPressed != "j"){
 				for (Mho mho:b.mhos){
-
+					//Doesnt work
 					mho.updatePosition(b.p);
-					//g.clearRect(mho.getxOld(),mho.getyOld(),mho.SIZE,mho.SIZE);
 				}
 			} 
 
-			//call repaint only a the end, call a method called update mhos first
+			
 		} 
-		/*if (!b.p.canMove(b.interiorFences,b.mhos)){
-			gameOver = true;
-			System.out.println("game over");
-		}*/
+		
 		repaint();
 
 	}

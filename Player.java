@@ -2,9 +2,6 @@
 import java.util.ArrayList;
 public class Player extends MobileObject{
 	
-	protected int x,y, xOld, yOld;
-	final static int SIZE = 40;
-	
 	public Player(){
 	
 		
