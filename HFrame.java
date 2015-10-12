@@ -1,20 +1,20 @@
-//
 import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 public class HFrame extends JFrame implements KeyListener{
 
-	final int frameSizeX = 1000;
-	final int frameSizeY = 900;
-
+	private final int frameSizeX = 1000;
+	private final int frameSizeY = 900;
+	
 	public HFrame(){
 		setSize(frameSizeX,frameSizeY);
+		setBackground(Color.WHITE);
 		this.addKeyListener(this);
 		repaint();
 	}
 
-	static Board b = new Board();
+	public static Board b = new Board();
 	boolean gameStarted = false;
 	boolean gameOver = false;
 
