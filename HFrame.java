@@ -5,27 +5,38 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 public class HFrame extends JFrame implements KeyListener{
 
-	public HFrame(){
+	final int frameSizeX = 1000;
+	final int frameSizeY = 900;
 
-		setSize(800,700);
+	public HFrame(){
+		setSize(frameSizeX,frameSizeY);
 		this.addKeyListener(this);
 		repaint();
-
 	}
 
-	Board b = new Board();
+	static Board b = new Board();
 	boolean gameStarted = false;
+	boolean gameOver = false;
 
 	public void paint(Graphics g){
+		/*if (gameOver){
+			gameOver(g);
+			System.out.println("Game Over");
+		}*/
 		if (!gameStarted){
 			drawFences(g);
 			gameStarted = true;
 		}
 
+		//b.updateMhos();
 		drawMhos(g);
 		drawPlayer(g);
-		g.clearRect(b.p.getxOld(),b.p.getyOld(),b.p.SIZE,b.p.SIZE);
+		clearMhos(g);
 
+		clearPlayer(g);
+		b.checkMhos();
+		
+		
 	}
 
 	public void drawFences(Graphics g){
@@ -52,64 +63,105 @@ public class HFrame extends JFrame implements KeyListener{
 			g.fillRect(mho.getX(), mho.getY(), mho.SIZE, mho.SIZE);
 		}
 	}
+	public void clearMhos(Graphics g){
+		for(Mho mho:b.mhos){
+			g.clearRect(mho.getxOld(),mho.getyOld(),mho.SIZE,mho.SIZE);
+		}
+	}
 	public void drawPlayer(Graphics g){
 		g.setColor(Color.GREEN);
 		g.fillRect(b.p.getX(),b.p.getY(),b.p.SIZE,b.p.SIZE);
 
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-
-
+	public void clearPlayer(Graphics g){
+		g.clearRect(b.p.getxOld(),b.p.getyOld(),b.p.SIZE,b.p.SIZE);
 	}
 
+
+
+	String[] keys = {"q","w","e","a","s","d","z","x","s","c","j"};
+	int STEP = MobileObject.STEP;
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		//Converts e.getKeyChar() to a string
 		String keyPressed =  e.getKeyChar() + "";
-		
-		//only works if the player can move
-		if (b.p.canMove(b.interiorFences, b.mhos) == true){
-			
-			switch (keyPressed){
-			
-			case "w": 
-				b.p.move(0, -b.STEP);
-				repaint();
-				break;
 
+		//only works if the player can move
+		if (b.p.canMove(b.interiorFences, b.mhos) == true && contains(keys,keyPressed)){
+			//System.out.println("valid key pressed");
+			switch (keyPressed){
+
+			case "w": 
+				b.p.moveUp();
+				break;
 			case "a": 
-				b.p.move(-b.STEP, 0);
-				repaint();
+				b.p.moveLeft();
 				break;
 			case "x": 
-				System.out.println("x");
-				b.p.move(0,b.STEP);
-				repaint();
+				b.p.moveDown();
+				break;
+			case "d": 
+				b.p.moveRight();
+				break;
+			case "q":
+				b.p.moveUpLeft();
+				break;
+			case "e":
+				b.p.moveUpRight();
 				break;
 
-			case "d": 
-				System.out.println("d");
-				b.p.move(b.STEP, 0);
-				repaint();
+			case "z":
+				b.p.moveDownLeft();
 				break;
+			case "c":
+				b.p.moveDownRight();
+				break;
+			case "j":
+				b.jump(b.p);
+				break;
+
 			}
 			if (keyPressed != "j"){
 				for (Mho mho:b.mhos){
-					mho.Ai(b.p);
-					g.clearRect(mho.getxOld(),mho.getyOld(),mho.SIZE,mho.SIZE);
+
+					mho.updatePosition(b.p);
+					//g.clearRect(mho.getxOld(),mho.getyOld(),mho.SIZE,mho.SIZE);
 				}
-			}
+			} 
+
 			//call repaint only a the end, call a method called update mhos first
-		}
+		} 
+		/*if (!b.p.canMove(b.interiorFences,b.mhos)){
+			gameOver = true;
+			System.out.println("game over");
+		}*/
+		repaint();
 
 	}
+	public void gameOver(Graphics g){
+		g.drawString("Game Over", 100, 100);
+	}
+	public boolean contains(String[] a, String b){
+		for (String element:a){
+			if (element.equals(b)){
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {
+
 
 	}
 
